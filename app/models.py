@@ -8,7 +8,6 @@ from app import db
 class User(db.Model):
     """A user."""
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
     contacts = db.relationship('Contact', backref='user', lazy=True)
 
     def __repr__(self):
@@ -32,3 +31,6 @@ class Contact(db.Model):
     last_name = db.Column(db.String(120))
     # Parent User who created this contact
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Contact {0} {1}>'.format(self.first_name, self.last_name)

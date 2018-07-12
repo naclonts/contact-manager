@@ -1,10 +1,20 @@
 from flask import Blueprint, render_template, jsonify, request, make_response, \
                 session
-
-from app.models import User
+from json import dumps
+from app.models import User, Contact
 from app import db
 
 router = Blueprint('routes', __name__)
+
+def to_json(model):
+    """ Returns a JSON representation of an SQLAlchemy-backed object.
+    """
+    json = {}
+
+    for col in model._sa_class_manager.mapper.mapped_table.columns:
+        json[col.name] = getattr(model, col.name)
+
+    return dumps(json)
 
 @router.route('/')
 def main_view():
@@ -12,9 +22,9 @@ def main_view():
     user = None
     if 'user_id' in session:
         user = User.query.filter_by(id=session['user_id']).first()
-        print('Found user! ID {0}'.format(user.id))
+        if user: print('Found user! ID {0}'.format(user.id))
     if user is None:
-        user = User(username='test username')
+        user = User()
         db.session.add(user)
         db.session.commit()
         session['user_id'] = str(user.id)
@@ -25,14 +35,14 @@ def main_view():
 
 @router.route('/api/contacts', methods=['GET', 'POST'])
 def get_contacts():
+    user = User.query.filter_by(id=session['user_id']).first()
     if request.method == 'GET':
-        print(session)
-        if not 'user_id' in session:
-            print('uid not found!')
-            return jsonify([])
-        user_id = session['user_id']
-        print('Contacts request from {0}'.format(user_id))
-        return jsonify([1, 2, 3, 42])
+        print('Contacts request from {0}'.format(session['user_id']))
+        contacts = Contact.query.filter_by(user_id=user.id).all()
+        return dumps([to_json(c) for c in contacts])
     elif request.method == 'POST':
-        print(request.json)
+        c = request.json['contact']
+        contact = Contact(first_name=c['firstName'], last_name=c['lastName'])
+        user.contacts.append(contact)
+        db.session.commit()
         return jsonify({ 'message': 'POST successful!' })
