@@ -34,3 +34,11 @@ class Contact(db.Model):
 
     def __repr__(self):
         return '<Contact {0} {1}>'.format(self.first_name, self.last_name)
+
+
+def model_to_dict(model):
+    """Returns a simple (serializable) dictionary from a SQLAlchemy object."""
+    d = {}
+    for col in model._sa_class_manager.mapper.mapped_table.columns:
+        d[col.name] = getattr(model, col.name)
+    return d

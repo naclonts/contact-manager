@@ -2,5 +2,5 @@
 *.db
 *.pyc
 node_modules
-src/static/assets
+app/static/assets/*
 __pycache__

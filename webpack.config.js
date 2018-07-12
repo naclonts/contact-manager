@@ -9,11 +9,11 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        main: ['babel-polyfill', './src/static/javascript/main.js']
+        main: ['babel-polyfill', './app/static/javascript/main.js']
     },
 
     output: {
-        path: path.resolve('./src/static/assets/'),
+        path: path.resolve('./app/static/assets/'),
         filename: '[name].js',
     },
 
