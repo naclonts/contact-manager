@@ -9,7 +9,7 @@ load_dotenv(os.path.join(APP_ROOT, '.env'))
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contacts-manager.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(app)
 
 # Sample HTTP error handling
