@@ -786,6 +786,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -11141,7 +11166,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.contact-list {\n    margin: 1em;\n    background-color: #333;\n    border-radius: 8px;\n    max-height: 80vh;\n    overflow-y: scroll;\n}\ntable {\n    border-collapse: collapse;\n    position: relative;\n}\n.head-table {\n    position: absolute;\n    z-index: 1;\n}\n.body-table {\n    margin-top: 1em;\n    position: relative;\n}\nthead {\n    display: table-header-group;\n    background-color: #555;\n}\ntd {\n    width: 8em;\n}\n\n", ""]);
 
 // exports
 
@@ -11247,23 +11272,55 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "contact-list" },
-    _vm._l(_vm.contacts, function(contact) {
-      return _c("div", [
-        _vm._v(
-          "\n        " +
-            _vm._s(contact.first_name) +
-            " " +
-            _vm._s(contact.last_name) +
-            "\n    "
-        )
-      ])
-    })
-  )
+  return _c("div", { staticClass: "contact-list" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("table", { staticClass: "body-table" }, [
+      _c(
+        "tbody",
+        _vm._l(_vm.contacts, function(contact) {
+          return _c("tr", [
+            _c("td", [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(contact.first_name) +
+                  "\n                "
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                "\n                    " +
+                  _vm._s(contact.last_name) +
+                  "\n                "
+              )
+            ])
+          ])
+        })
+      )
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("table", { staticClass: "head-table" }, [
+      _c("thead", [
+        _c("tr", [
+          _c("td", [
+            _vm._v("\n                    First Name\n                ")
+          ]),
+          _vm._v(" "),
+          _c("td", [
+            _vm._v("\n                    Last Name\n                ")
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
