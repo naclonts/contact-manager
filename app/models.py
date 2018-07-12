@@ -2,6 +2,7 @@
 
 import uuid
 import sys
+from sqlalchemy.dialects.postgresql import ARRAY
 from app import db
 
 
@@ -31,7 +32,7 @@ class Contact(db.Model):
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=True)
     date_of_birth = db.Column(db.Date, nullable=True)
-    # addresses = db.Column(db.Array(db.String(200)), nullable=True)
+    addresses = db.Column(ARRAY(db.String(200)), nullable=True)
     # phone_numbers = db.Column(db.Array(db.String(30)), nullable=True)
     # emails = db.Column(db.Array(db.String(120)), nullable=True)
 
