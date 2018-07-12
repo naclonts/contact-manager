@@ -1,4 +1,5 @@
 .env
-.db
+*.db
 node_modules
 src/static/assets
+__pycache__

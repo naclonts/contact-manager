@@ -20,5 +20,5 @@ class User:
                 return self.contacts.remove(contact)
         print('No contact found with ID {0}'.format(contact_id))
 
-def get_user(user_id):
+def get_user(id_str):
     pass

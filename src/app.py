@@ -2,6 +2,7 @@ import os
 from models import user
 from flask import Flask, render_template, jsonify, request, make_response, \
                   session
+from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
 # Load environment variables file
@@ -9,6 +10,9 @@ APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
 load_dotenv(os.path.join(APP_ROOT, '.env'))
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///contacts-manager.db'
+db = SQLAlchemy(app)
 
 @app.route('/')
 def main_view():
@@ -38,6 +42,4 @@ def get_contacts():
         return jsonify({ 'message': 'POST successful!' })
 
 if __name__ == '__main__':
-    print(os.getenv('SECRET_KEY'))
-    app.secret_key = os.getenv('SECRET_KEY')
     app.run()
