@@ -3,12 +3,14 @@
  */
 <template>
 <div class="contact-list">
-    <button @click="showNewContactForm=true"
+    <button @click="openEditor(null)"
     >+</button>
 
-    <new-contact-form v-if="showNewContactForm"
+    <editor-form v-if="showEditorForm"
+        :contact="editingContact"
+        @save="saveForm"
         @cancel="cancelForm"
-    ></new-contact-form>
+    ></editor-form>
 
     <div class="table-wrapper">
         <table class="head-table">
@@ -18,7 +20,10 @@
                         First Name
                     </td>
                     <td>
-                        Last Named
+                        Last Name
+                    </td>
+                    <td>
+                        Edit
                     </td>
                 </tr>
             </thead>
@@ -33,20 +38,23 @@
                     <td>
                         {{ contact.last_name }}
                     </td>
+                    <td>
+                        <button
+                            @click="openEditor(contact)"
+                        >Edit</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-
-
 
 </div>
 </template>
 
 <script>
 'use strict';
-import NewContactForm from './new-contact-form.vue';
+import * as api from '../javascript/api';
+import EditorForm from './editor-form.vue';
 
 export default {
     props: {
@@ -55,18 +63,27 @@ export default {
 
     data() {
         return {
-            showNewContactForm: false
+            showEditorForm: false,
+            editingContact: {}
         }
     },
 
     methods: {
+        openEditor: function(contact) {
+            this.editingContact = contact;
+            this.showEditorForm = true;
+        },
+        saveForm: async function(contact) {
+            console.log(await api.updateContact(contact));
+            this.showEditorForm = false;
+        },
         cancelForm: function() {
-            this.showNewContactForm = false;
+            this.showEditorForm = false;
         }
     },
 
     components: {
-        'new-contact-form': NewContactForm
+        'editor-form': EditorForm
     }
 }
 </script>

@@ -33,8 +33,8 @@ class Contact(db.Model):
     last_name = db.Column(db.String(120), nullable=True)
     date_of_birth = db.Column(db.Date, nullable=True)
     addresses = db.Column(ARRAY(db.String(200)), nullable=True)
-    # phone_numbers = db.Column(db.Array(db.String(30)), nullable=True)
-    # emails = db.Column(db.Array(db.String(120)), nullable=True)
+    phone_numbers = db.Column(ARRAY(db.String(30)), nullable=True)
+    emails = db.Column(ARRAY(db.String(120)), nullable=True)
 
     # Parent User who created this contact
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

@@ -1,3 +1,8 @@
+"""
+This module defines routes, including the main page view and API endpoints
+for CRUD'ing contacts.
+"""
+
 from flask import Blueprint, render_template, jsonify, request, make_response, \
                 session
 from app.models import User, Contact, model_to_dict
@@ -22,17 +27,48 @@ def main_view():
         print('set session uid to {0}'.format(session['user_id']))
     return response
 
-@router.route('/api/contacts', methods=['GET', 'POST'])
-def get_contacts():
+@router.route('/api/contacts', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def contacts_api():
     user = User.query.filter_by(id=session['user_id']).first()
-    # `Get` requests return list of contacts for user
+    # GET: return list of contacts
     if request.method == 'GET':
-        contacts = Contact.query.filter_by(user_id=user.id).all()
-        return jsonify([model_to_dict(c) for c in contacts])
-    # `Post` requests add a new contact
+        return get_contacts(user)
+    # POST: add a new contact
     elif request.method == 'POST':
-        c = request.json['contact']
-        contact = Contact(first_name=c['firstName'], last_name=c['lastName'])
-        user.contacts.append(contact)
-        db.session.commit()
-        return jsonify({ 'message': 'POST successful!' })
+        return add_contact(user, request.json['contact'])
+    # PUT: replace an existing contact
+    elif request.method == 'PUT':
+        return update_contact(user, request.json['contact'])
+    elif request.method == 'DELETE':
+        pass
+
+
+def get_contacts(user):
+    contacts = Contact.query.filter_by(user_id=user.id).all()
+    return jsonify([model_to_dict(c) for c in contacts])
+
+def add_contact(user, c):
+    contact = Contact(first_name=c['firstName'], last_name=c['lastName'])
+    user.contacts.append(contact)
+    db.session.commit()
+    return jsonify({ 'message': 'POST successful!' })
+
+def update_contact(user, contact_dict):
+    # Prevent key errors when accessing fields
+    def key_or_none(key, dic):
+        if key in dic:
+            return dic[key]
+        else:
+            return None
+    # Assign JSON fields to model
+    contact = Contact.query.get(contact_dict['id'])
+    contact.first_name = key_or_none('first_name', contact_dict)
+    contact.last_name = key_or_none('last_name', contact_dict)
+    contact.date_of_birth = key_or_none('date_of_birth', contact_dict)
+    contact.addresses = key_or_none('addresses', contact_dict)
+    contact.phone_numbers = key_or_none('phone_numbers', contact_dict)
+    contact.emails = key_or_none('emails', contact_dict)
+    # Save the changes
+    db.session.commit()
+
+    return jsonify({ 'message': 'Contact updated!' })

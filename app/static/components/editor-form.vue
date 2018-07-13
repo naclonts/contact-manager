@@ -4,8 +4,9 @@
 <template>
 <div class="new-contact">
     <div class="modal">
-        <h2>New Contact Form</h2>
+        <h2>Add/Edit Contact</h2>
 
+        <input v-model=contact.first_name placeholder="First name" />
 
 
         <button @click="save" class="save">Save</button>
@@ -19,14 +20,19 @@
 'use strict';
 
 export default {
-    
+    props: {
+        contact: {
+            type: Object,
+            default: () => { return {} }
+        }
+    },
 
     methods: {
         save: function() {
-
+            this.$emit('save', this.contact);
         },
         cancel: function() {
-            this.$emit('cancel')
+            this.$emit('cancel');
         }
     }
 }

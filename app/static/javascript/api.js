@@ -11,7 +11,6 @@ export async function getContacts() {
     return await response.json();
 }
 
-
 /**
  * Add new contact to server.
  * @param {Object} contact to add
@@ -21,10 +20,18 @@ export async function addContact(contact) {
     return await response.json();
 }
 
+/**
+ * Replace the given contact on server.
+ * @param  {Object} contact with updated fields
+ */
+export async function updateContact(contact) {
+    let response = await request('contacts', 'PUT', { contact });
+    return await response.json();
+}
 
 /**
  * Helper function to make HTTP requests to server.
- * @param  {String} url endpoint
+ * @param  {String} url endpoint (after '/api/')
  * @param  {String} [method='GET']
  * @param  {Object} [body={}] JSON data to post/put/etc.
  * @return {Response}
