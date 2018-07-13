@@ -2,6 +2,7 @@
 *.db
 *.pyc
 node_modules
-*/assets/*
-*/assets*
+/assets
+/assets/
+app/static/assets/
 __pycache__

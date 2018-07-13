@@ -100,7 +100,9 @@ export default {
                 this.contacts[i] = contact;
             // If this contact doesn't exist, add it
             } else {
-                console.log(await api.addContact(contact));
+                let res = await api.addContact(contact);
+                console.log(res.message);
+                contact.id = res.id;
                 this.contacts.push(contact);
             }
             // Exit modal
@@ -147,12 +149,17 @@ table {
     border-collapse: collapse;
     position: relative;
 }
+table tr td {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
 .head-table {
     position: absolute;
     z-index: 1;
+    height: 2em;
 }
 .body-table {
-    margin-top: 1em;
+    margin-top: 2em;
     position: relative;
 }
 thead {

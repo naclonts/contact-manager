@@ -53,7 +53,7 @@ def add_contact(user, c):
     contact = Contact(**c) # unpack dict `c` to model class parameters
     user.contacts.append(contact)
     db.session.commit()
-    return jsonify({ 'message': 'POST successful!' })
+    return jsonify({ 'id': contact.id, 'message': 'POST successful!' })
 
 def delete_contact(c):
     Contact.query.filter_by(id = c['id']).delete()
