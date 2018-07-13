@@ -6,12 +6,21 @@
     <div class="modal">
         <h2>Add/Edit Contact</h2>
 
+        <label>First Name</label>
         <input v-model="contact.first_name" placeholder="First name" />
-        <input v-model="contact.last_name" placeholder="Last name" />
-        <input v-model="contact.date_of_birth" placeholder="Birthday" />
 
-        <button @click="save" class="save">Save</button>
-        <button @click="cancel" class="cancel">Cancel</button>
+        <label>Last Name</label>
+        <input v-model="contact.last_name" placeholder="Last name" />
+
+        <label>Birthday</label>
+        <input v-model="contact.date_of_birth" placeholder="Birthday"
+            type="date"
+        />
+
+        <div class="button-wrapper">
+            <button @click="save" class="save">Save</button>
+            <button @click="cancel" class="cancel">Cancel</button>
+        </div>
     </div>
 </div>
 </template>
@@ -53,11 +62,46 @@ export default {
     background-color: hsla(0, 0%, 70%, 0.5);
 }
 .modal {
-    background-color: #333;
-    margin: 4em;
-    height: 8em;
+    display: flex;
+    flex-direction: column;
+    background-color: hsl(216, 66%, 12%);
+    margin: 4em auto;
+    max-width: 20em;
+    padding: 1em;
+    border-radius: 4px;
+}
+.modal > * {
+    margin: 1em auto;
+    width: 100%;
+    line-height: 1.5em;
 }
 .modal h2 {
-    margin: auto;
+    margin: 0 auto 0.5em auto;
+}
+.modal input {
+    margin-top: 0;
+    border-radius: 2px;
+    background-image: none;
+    font-size: 1em;
+    border: none;
+    border-bottom: 1px solid hsl(89, 100%, 50%);
+    background-color: transparent;
+    color: white;
+}
+.modal input::placeholder {
+    color: #aaa;
+}
+.modal label {
+    font-size: 0.75em;
+    margin: 0;
+    color: #666;
+}
+.modal .button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.modal .button-wrapper button {
+    width: 45%;
 }
 </style>

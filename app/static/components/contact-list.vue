@@ -16,18 +16,13 @@
         <table class="head-table">
             <thead>
                 <tr>
-                    <td>
-                        First Name
+                    <td v-for="header in headers"
+                        @click="sortByHeader(header)">
+                        {{ header }}
                     </td>
-                    <td>
-                        Last Name
-                    </td>
-                    <td>
-                        Edit
-                    </td>
-                    <td>
-                        Delete
-                    </td>
+                </tr>
+                <tr>
+
                 </tr>
             </thead>
         </table>
@@ -35,19 +30,14 @@
         <table class="body-table">
             <tbody>
                 <tr v-for="contact in contacts">
-                    <td>
-                        {{ contact.first_name }}
-                    </td>
-                    <td>
-                        {{ contact.last_name }}
-                    </td>
-                    <td>
-                        <button
+                    <td>{{ contact.first_name }}</td>
+                    <td>{{ contact.last_name }}</td>
+                    <td>{{ formatDate(contact.date_of_birth) }}</td>
+                    <td><button
                             @click="openEditor(contact)"
                         >Edit</button>
                     </td>
-                    <td>
-                        <button
+                    <td><button
                             @click="deleteContact(contact)"
                         >X</button>
                     </td>
@@ -64,13 +54,15 @@
 import * as api from '../javascript/api';
 import EditorForm from './editor-form.vue';
 import { clone } from 'ramda';
+import * as moment from 'moment';
 
 export default {
     data() {
         return {
             contacts: [],
             showEditorForm: false,
-            editingContact: {}
+            editingContact: {},
+            timeoutId: null
         }
     },
 
@@ -86,6 +78,9 @@ export default {
     computed: {
         newContact: function() {
             return {};
+        },
+        headers: function() {
+            return ['First Name', 'Last Name', 'Birthday', 'Edit', 'Delete'];
         }
     },
 
@@ -120,13 +115,18 @@ export default {
             // Delete from server after 3 seconds, to give user a chance to Undo
             async function trulyDelete() {
                 console.log(await api.deleteContact(contact));
+                this.timeoutId = null;
             }
             this.contacts.splice(this.index(contact), 1);
-            let timer = setTimeout(trulyDelete, 3000);
+            this.timeoutId = setTimeout(trulyDelete, 3000);
         },
 
         index: function(contact) {
             return this.contacts.findIndex((c) => c.id == contact.id);
+        },
+
+        formatDate: function(date) {
+            return moment(date).format('M/D/YYYY');
         }
     }
 }
@@ -134,11 +134,6 @@ export default {
 
 
 <style scoped>
-button {
-    font-size: 1.5em;
-    width: 1em;
-    height: 1em;
-}
 .contact-list {
     margin: 1em;
 }
