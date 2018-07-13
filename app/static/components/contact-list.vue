@@ -5,6 +5,7 @@
 <div class="contact-list">
     <button @click="openEditor(newContact)"
     >+</button>
+    <input v-model="searchText" />
 
     <editor-form v-if="showEditorForm"
         :contact="editingContact"
@@ -29,7 +30,9 @@
 
         <table class="body-table">
             <tbody>
-                <tr v-for="contact in contacts">
+                <tr v-for="contact in contacts"
+                    v-if="visible(contact)"
+                >
                     <td>{{ contact.first_name }}</td>
                     <td>{{ contact.last_name }}</td>
                     <td>{{ formatDate(contact.date_of_birth) }}</td>
@@ -62,7 +65,8 @@ export default {
             contacts: [],
             showEditorForm: false,
             editingContact: {},
-            timeoutId: null
+            timeoutId: null,
+            searchText: ''
         }
     },
 
@@ -129,6 +133,27 @@ export default {
 
         formatDate: function(date) {
             return moment(date).format('M/D/YYYY');
+        },
+
+        visible: function(contact) {
+            let text = this.searchText.toLowerCase();
+            // Show everything when there hasn't been a search
+            if (text == '') return true;
+            // Functions to check if field is a match
+            function match(str) {
+                if (!str) return false;
+                return str.toLowerCase().includes(text);
+            }
+            function matchArray(arr) {
+                if (!arr) return false;
+                return arr.filter(match).length > 0;
+            }
+            // Check if search text matches any field
+            return match(contact.first_name) || match(contact.last_name)
+                || match(contact.date_of_birth)
+                || matchArray(contact.addresses)
+                || matchArray(contact.phone_numbers)
+                || matchArray(contact.emails);
         }
     }
 }

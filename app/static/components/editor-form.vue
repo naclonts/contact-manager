@@ -6,16 +6,24 @@
     <div class="modal">
         <h2>Add/Edit Contact</h2>
 
-        <label>First Name</label>
         <input v-model="contact.first_name" placeholder="First name" />
 
-        <label>Last Name</label>
         <input v-model="contact.last_name" placeholder="Last name" />
+
+        <br />
 
         <label>Birthday</label>
         <input v-model="contact.date_of_birth" placeholder="Birthday"
             type="date"
         />
+
+        <br />
+
+        <label>Addresses</label>
+        <input placeholder="Address 1" />
+        <input placeholder="Address 2" />
+        <input placeholder="Address 3" />
+
 
         <div class="button-wrapper">
             <button @click="save" class="save">Save</button>
@@ -77,19 +85,6 @@ export default {
 }
 .modal h2 {
     margin: 0 auto 0.5em auto;
-}
-.modal input {
-    margin-top: 0;
-    border-radius: 2px;
-    background-image: none;
-    font-size: 1em;
-    border: none;
-    border-bottom: 1px solid hsl(89, 100%, 50%);
-    background-color: transparent;
-    color: white;
-}
-.modal input::placeholder {
-    color: #aaa;
 }
 .modal label {
     font-size: 0.75em;
