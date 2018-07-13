@@ -17,7 +17,7 @@ module.exports = {
         filename: '[name].js',
     },
 
-    devtool: 'source-map',
+    devtool: 'cheap-eval-source-map',
 
     module: {
         rules: [
@@ -61,16 +61,16 @@ module.exports = {
         new HardSourceWebpackPlugin(),
     ],
 
-    optimization: {
-        minimizer: [
-            // Minimize JavaScript output
-            new UglifyJsPlugin({
-                sourceMap: true,
-                parallel: true,
-                cache: true
-            })
-        ]
-    }
+    // optimization: {
+    //     minimizer: [
+    //         // Minimize JavaScript output
+    //         new UglifyJsPlugin({
+    //             sourceMap: true,
+    //             parallel: true,
+    //             cache: true
+    //         })
+    //     ]
+    // }
 };
 
 

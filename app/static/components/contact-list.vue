@@ -55,26 +55,34 @@
 'use strict';
 import * as api from '../javascript/api';
 import EditorForm from './editor-form.vue';
+import { clone } from 'ramda';
 
 export default {
-    props: {
-        contacts: Array
-    },
-
     data() {
         return {
+            contacts: [],
             showEditorForm: false,
             editingContact: {}
         }
     },
 
+    async mounted() {
+        console.log('Mounted contact list')
+        this.contacts = await api.getContacts();
+    },
+
     methods: {
         openEditor: function(contact) {
-            this.editingContact = contact;
+            this.editingContact = clone(contact);
             this.showEditorForm = true;
         },
         saveForm: async function(contact) {
+            // Update on server
             console.log(await api.updateContact(contact));
+            // Update in this component
+            let i = this.contacts.findIndex((c) => c.id == contact.id);
+            this.contacts[i] = clone(contact);
+            // Exit modal
             this.showEditorForm = false;
         },
         cancelForm: function() {

@@ -6,7 +6,6 @@ let vm = new Vue({
     el: '#app',
 
     data: {
-        contacts: []
     },
 
     components: {
@@ -14,17 +13,10 @@ let vm = new Vue({
     },
 
     async beforeMount() {
-        // console.log('vue-start it up!')
+        console.log('vue-start it up!')
         // let response = await api.addContact({
         //     firstName: 'dude', lastName: 'come on'
         // });
-        // console.log(`Add contact response: ${response.message}`);
-
-        this.contacts = await api.getContacts();
-        console.log(this.contacts);
-    },
-
-    methods: {
 
     }
 });

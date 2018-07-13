@@ -6,8 +6,9 @@
     <div class="modal">
         <h2>Add/Edit Contact</h2>
 
-        <input v-model=contact.first_name placeholder="First name" />
-
+        <input v-model="contact.first_name" placeholder="First name" />
+        <input v-model="contact.last_name" placeholder="Last name" />
+        <input v-model="contact.date_of_birth" placeholder="Birthday" />
 
         <button @click="save" class="save">Save</button>
         <button @click="cancel" class="cancel">Cancel</button>
