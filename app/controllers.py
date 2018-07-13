@@ -38,9 +38,10 @@ def contacts_api():
         return add_contact(user, request.json['contact'])
     # PUT: replace an existing contact
     elif request.method == 'PUT':
-        return update_contact(user, request.json['contact'])
+        return update_contact(request.json['contact'])
+    # DELETE: bye!
     elif request.method == 'DELETE':
-        pass
+        return delete_contact(request.json['contact'])
 
 
 def get_contacts(user):
@@ -48,12 +49,19 @@ def get_contacts(user):
     return jsonify([model_to_dict(c) for c in contacts])
 
 def add_contact(user, c):
-    contact = Contact(first_name=c['firstName'], last_name=c['lastName'])
+    # contact = Contact(first_name=c['first_name'], last_name=c['last_name'])
+    contact = Contact(**c) # unpack dict `c` to model class parameters
     user.contacts.append(contact)
     db.session.commit()
     return jsonify({ 'message': 'POST successful!' })
 
-def update_contact(user, contact_dict):
+def delete_contact(c):
+    Contact.query.filter_by(id = c['id']).delete()
+    db.session.commit()
+    return jsonify({ 'message': 'Contact deleted.' })
+
+
+def update_contact(contact_dict):
     # Prevent key errors when accessing fields
     def key_or_none(key, dic):
         if key in dic:

@@ -20,6 +20,8 @@
 <script>
 'use strict';
 
+import { clone } from 'ramda';
+
 export default {
     props: {
         contact: {
@@ -30,7 +32,7 @@ export default {
 
     methods: {
         save: function() {
-            this.$emit('save', this.contact);
+            this.$emit('save', clone(this.contact));
         },
         cancel: function() {
             this.$emit('cancel');

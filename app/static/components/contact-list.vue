@@ -3,7 +3,7 @@
  */
 <template>
 <div class="contact-list">
-    <button @click="openEditor(null)"
+    <button @click="openEditor(newContact)"
     >+</button>
 
     <editor-form v-if="showEditorForm"
@@ -25,6 +25,9 @@
                     <td>
                         Edit
                     </td>
+                    <td>
+                        Delete
+                    </td>
                 </tr>
             </thead>
         </table>
@@ -42,6 +45,11 @@
                         <button
                             @click="openEditor(contact)"
                         >Edit</button>
+                    </td>
+                    <td>
+                        <button
+                            @click="deleteContact(contact)"
+                        >X</button>
                     </td>
                 </tr>
             </tbody>
@@ -66,9 +74,19 @@ export default {
         }
     },
 
+    components: {
+        'editor-form': EditorForm
+    },
+
     async mounted() {
         console.log('Mounted contact list')
         this.contacts = await api.getContacts();
+    },
+
+    computed: {
+        newContact: function() {
+            return {};
+        }
     },
 
     methods: {
@@ -76,22 +94,40 @@ export default {
             this.editingContact = clone(contact);
             this.showEditorForm = true;
         },
+
         saveForm: async function(contact) {
-            // Update on server
-            console.log(await api.updateContact(contact));
-            // Update in this component
-            let i = this.contacts.findIndex((c) => c.id == contact.id);
-            this.contacts[i] = clone(contact);
+            let i = this.index(contact);
+            // If this contact already exists, update it
+            if (i > -1) {
+                // Update on server
+                console.log(await api.updateContact(contact));
+                // Update in this component
+                this.contacts[i] = contact;
+            // If this contact doesn't exist, add it
+            } else {
+                console.log(await api.addContact(contact));
+                this.contacts.push(contact);
+            }
             // Exit modal
             this.showEditorForm = false;
         },
+
         cancelForm: function() {
             this.showEditorForm = false;
-        }
-    },
+        },
 
-    components: {
-        'editor-form': EditorForm
+        deleteContact: function(contact) {
+            // Delete from server after 3 seconds, to give user a chance to Undo
+            async function trulyDelete() {
+                console.log(await api.deleteContact(contact));
+            }
+            this.contacts.splice(this.index(contact), 1);
+            let timer = setTimeout(trulyDelete, 3000);
+        },
+
+        index: function(contact) {
+            return this.contacts.findIndex((c) => c.id == contact.id);
+        }
     }
 }
 </script>

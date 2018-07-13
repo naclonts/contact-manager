@@ -29,6 +29,13 @@ export async function updateContact(contact) {
     return await response.json();
 }
 
+
+export async function deleteContact(contact) {
+    let response = await request('contacts', 'DELETE', { contact });
+    return await response.json();
+}
+
+
 /**
  * Helper function to make HTTP requests to server.
  * @param  {String} url endpoint (after '/api/')
