@@ -67,6 +67,7 @@ def delete_contact(c):
 
 def update_contact(contact_dict):
     contact = Contact.query.get(contact_dict['id'])
+    print(contact_dict)
 
     # Assign JSON fields to model
     for key, val in contact_dict.items():

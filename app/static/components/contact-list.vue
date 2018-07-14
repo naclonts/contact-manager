@@ -168,6 +168,7 @@ export default {
         },
 
         viewDetail: function(contact) {
+            // TODO: implement!
             console.log(`View ${contact.first_name}`);
         },
 

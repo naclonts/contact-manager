@@ -20,9 +20,11 @@
         <br />
 
         <label>Addresses</label>
-        <input placeholder="Address 1" />
-        <input placeholder="Address 2" />
-        <input placeholder="Address 3" />
+        <button @click="addAddress" title="Add Address">+</button>
+        <input v-for="(address, i) in addresses"
+            v-model="address.value"
+            :placeholder="'Address ' + i"
+        />
 
 
         <div class="button-wrapper">
@@ -47,14 +49,40 @@ export default {
         }
     },
 
+    data () {
+        return {
+            addresses: []
+        };
+    },
+
+    mounted: function() {
+        this.addresses = loadArray(this.contact.addresses);
+    },
+
     methods: {
         save: function() {
+            this.contact.addresses = saveArray(this.addresses);
             this.$emit('save', clone(this.contact));
         },
         cancel: function() {
             this.$emit('cancel');
+        },
+        addAddress: function() {
+            this.addresses.push({ value: '' });
         }
     }
+}
+
+// Takes raw array of values and returns array of objects with `value` field
+function loadArray(array) {
+    if (!array) return [];
+    return array.map((a) => ({ value: a }));
+}
+// Takes array of objects with `value` field and returns array of raw values
+function saveArray(array) {
+    if (!array) return [];
+    // return `truth-y` values
+    return array.map((a) => a.value).filter((a) => !!a);
 }
 </script>
 
