@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
 load_dotenv(os.path.join(APP_ROOT, '.env'))
 
-app = Flask(__name__)
+app = Flask('app')
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(app)

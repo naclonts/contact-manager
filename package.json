@@ -22,7 +22,9 @@
     "url": "https://github.com/kokopelli314/contact-manager/issues"
   },
   "homepage": "https://github.com/kokopelli314/contact-manager#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack-cli": "^3.0.8"
+  },
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",

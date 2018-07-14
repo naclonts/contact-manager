@@ -37,7 +37,7 @@
 <script>
 'use strict';
 
-import { clone } from 'ramda';
+const clone = require('ramda/src/clone');
 
 export default {
     props: {

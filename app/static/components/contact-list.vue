@@ -56,8 +56,8 @@
 'use strict';
 import * as api from '../javascript/api';
 import EditorForm from './editor-form.vue';
-import { clone } from 'ramda';
 import * as moment from 'moment';
+const clone = require('ramda/src/clone');
 
 export default {
     data() {
@@ -165,14 +165,16 @@ export default {
     margin: 1em;
 }
 .table-wrapper {
-    background-color: #333;
-    border-radius: 8px;
-    max-height: 80vh;
-    overflow-y: scroll;
+    position: relative;
+    width: 100%;
 }
 table {
     border-collapse: collapse;
     position: relative;
+}
+/* Light up row when user hovers */
+.body-table tr:hover {
+    background-color: #555;
 }
 table tr td {
     padding-top: 0.5em;
@@ -182,14 +184,14 @@ table tr td {
     position: absolute;
     z-index: 1;
     height: 2em;
+    color: #ccc;
 }
 .body-table {
-    margin-top: 2em;
-    position: relative;
+    position: absolute;
+    top: 2em;
 }
 thead {
     display: table-header-group;
-    background-color: #555;
 }
 td {
     width: 8em;
