@@ -90,6 +90,6 @@ function vueScript() {
 function apiUrl() {
     return JSON.stringify(process.env.NODE_ENV === 'production'
         ? 'https://nathanclonts.com/contact-manager/api/'
-        : 'http://127.0.0.0:5000/api/'
+        : 'http://127.0.0.1:5000/api/'
     );
 }
