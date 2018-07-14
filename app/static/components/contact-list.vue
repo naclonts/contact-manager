@@ -3,9 +3,11 @@
  */
 <template>
 <div class="contact-list">
-    <button @click="openEditor(newContact)"
+    <button class="add-contact"
+        @click="openEditor(newContact)"
+        title="Add contact"
     >+</button>
-    <input v-model="searchText" />
+    <input class="search" v-model="searchText" />
 
     <editor-form v-if="showEditorForm"
         :contact="editingContact"
@@ -32,17 +34,20 @@
             <tbody>
                 <tr v-for="contact in contacts"
                     v-if="visible(contact)"
+                    @click="viewDetail(contact)"
+                    @mouseover="hoveringContactId=contact.id"
+                    @mouseleave="hoveringContactId=null"
                 >
                     <td>{{ contact.first_name }}</td>
                     <td>{{ contact.last_name }}</td>
                     <td>{{ formatDate(contact.date_of_birth) }}</td>
-                    <td><button
-                            @click="openEditor(contact)"
-                        >Edit</button>
-                    </td>
-                    <td><button
-                            @click="deleteContact(contact)"
-                        >X</button>
+                    <td class="button-wrapper" v-if="hoveringOver(contact)">
+                        <button @click="openEditor(contact)">
+                            <i class="fas fa-pen" title="Edit contact"></i>
+                        </button>
+                        <button @click="deleteContact(contact)">
+                            <i class="fas fa-trash" title="Remove contact"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -66,7 +71,8 @@ export default {
             showEditorForm: false,
             editingContact: {},
             timeoutId: null,
-            searchText: ''
+            searchText: '',
+            hoveringContactId: null
         }
     },
 
@@ -84,7 +90,7 @@ export default {
             return {};
         },
         headers: function() {
-            return ['First Name', 'Last Name', 'Birthday', 'Edit', 'Delete'];
+            return ['First Name', 'Last Name', 'Birthday', 'Edit'];
         }
     },
 
@@ -154,6 +160,14 @@ export default {
                 || matchArray(contact.addresses)
                 || matchArray(contact.phone_numbers)
                 || matchArray(contact.emails);
+        },
+
+        viewDetail: function(contact) {
+            console.log(`View ${contact.first_name}`);
+        },
+
+        hoveringOver: function(contact) {
+            return this.hoveringContactId == contact.id;
         }
     }
 }
@@ -172,9 +186,39 @@ table {
     border-collapse: collapse;
     position: relative;
 }
+input.search {
+    font-size: 1.5em;
+}
+button.add-contact {
+    font-size: 1.5em;
+    background-color: hsl(89, 100%, 55%);
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.28),
+                0 1px 18px 0 rgba(0,0,0,0.12),
+                0 3px 5px -1px rgba(0,0,0,0.4);
+}
+button.add-contact:hover {
+    background-color: hsl(89, 100%, 75%);
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.25),
+                0 1px 18px 0 rgba(0,0,0,0.24),
+                0 3px 5px -1px rgba(0,0,0,0.4);
+}
+.button-wrapper button {
+    background-color: transparent;
+    line-height: 1em;
+    height: 1em;
+    font-size: 1em;
+    color: white;
+}
+.button-wrapper button:hover {
+    color: hsl(89, 100%, 55%);
+}
 /* Light up row when user hovers */
 .body-table tr:hover {
-    background-color: #555;
+    background-color: #444;
+}
+.body-table tr {
+    cursor: pointer;
+    text-transform: capitalize;
 }
 table tr td {
     padding-top: 0.5em;
