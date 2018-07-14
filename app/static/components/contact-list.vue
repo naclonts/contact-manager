@@ -7,7 +7,12 @@
         @click="openEditor(newContact)"
         title="Add contact"
     >+</button>
-    <input class="search" v-model="searchText" />
+    <div class="search">
+        <i class="fas fa-search"></i>
+        <input class="search-input" v-model="searchText"
+            placeholder="Search"
+        />
+    </div>
 
     <editor-form v-if="showEditorForm"
         :contact="editingContact"
@@ -16,7 +21,7 @@
     ></editor-form>
 
     <div class="table-wrapper">
-        <table class="head-table">
+        <table class="body-table">
             <thead>
                 <tr>
                     <td v-for="header in headers"
@@ -24,13 +29,7 @@
                         {{ header }}
                     </td>
                 </tr>
-                <tr>
-
-                </tr>
             </thead>
-        </table>
-
-        <table class="body-table">
             <tbody>
                 <tr v-for="contact in contacts"
                     v-if="visible(contact)"
@@ -40,7 +39,6 @@
                 >
                     <td>{{ contact.first_name }}</td>
                     <td>{{ contact.last_name }}</td>
-                    <td>{{ formatDate(contact.date_of_birth) }}</td>
                     <td class="button-wrapper" v-if="hoveringOver(contact)">
                         <button @click="openEditor(contact)">
                             <i class="fas fa-pen" title="Edit contact"></i>
@@ -82,7 +80,12 @@ export default {
 
     async mounted() {
         console.log('Mounted contact list')
-        this.contacts = await api.getContacts();
+        let contactList = await api.getContacts();
+        contactList.sort((a, b) => {
+            return a.first_name.toLowerCase() < b.first_name.toLowerCase()
+                ? -1 : +1;
+        });
+        this.contacts = contactList;
     },
 
     computed: {
@@ -90,7 +93,7 @@ export default {
             return {};
         },
         headers: function() {
-            return ['First Name', 'Last Name', 'Birthday', 'Edit'];
+            return ['First Name', 'Last Name', 'Edit'];
         }
     },
 
@@ -178,16 +181,21 @@ export default {
 .contact-list {
     margin: 1em;
 }
-.table-wrapper {
-    position: relative;
-    width: 100%;
+.search {
+    display: inline-block;
+    height: 1.6em;
+    font-size: 1.25em;
+    border-bottom: 1px solid hsl(89, 100%, 50%);
+    margin: 0.5em;
+    margin-bottom: 0;
 }
-table {
-    border-collapse: collapse;
-    position: relative;
+.search input {
+    border: none;
+    margin: 0.25em;
+    margin-bottom: 0;
 }
-input.search {
-    font-size: 1.5em;
+.search:focus-within {
+    background-color: #555;
 }
 button.add-contact {
     font-size: 1.5em;
@@ -213,16 +221,28 @@ button.add-contact:hover {
     color: hsl(89, 100%, 55%);
 }
 /* Light up row when user hovers */
+.table-wrapper {
+    position: relative;
+}
+table {
+    border-collapse: collapse;
+    position: relative;
+}
+.table-wrapper, table {
+    width: 100%;
+}
 .body-table tr:hover {
     background-color: #444;
 }
 .body-table tr {
     cursor: pointer;
     text-transform: capitalize;
+    height: 2em;
 }
 table tr td {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
+
 }
 .head-table {
     position: absolute;
