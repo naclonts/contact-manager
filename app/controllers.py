@@ -8,15 +8,20 @@ from flask import Blueprint, render_template, jsonify, request, make_response, \
 from app.models import User, Contact, model_to_dict
 from app import db
 
+# Define as a Blueprint for Flask modularity
 router = Blueprint('routes', __name__)
 
+# Main page view
 @router.route('/')
 def main_view():
     response = make_response(render_template('index.html'))
     user = None
+    # Get current user
     if 'user_id' in session:
         user = User.query.filter_by(id=session['user_id']).first()
         if user: print('Found user! ID {0}'.format(user.id))
+        else: print('User ID not found! ID {0}'.format(user.id))
+    # Create user session if non-existent
     if user is None:
         user = User()
         db.session.add(user)
@@ -27,6 +32,7 @@ def main_view():
         print('set session uid to {0}'.format(session['user_id']))
     return response
 
+# API routes for CRUD actions on contacts
 @router.route('/api/contacts', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def contacts_api():
     user = User.query.filter_by(id=session['user_id']).first()
@@ -58,7 +64,6 @@ def delete_contact(c):
     Contact.query.filter_by(id = c['id']).delete()
     db.session.commit()
     return jsonify({ 'message': 'Contact deleted.' })
-
 
 def update_contact(contact_dict):
     contact = Contact.query.get(contact_dict['id'])

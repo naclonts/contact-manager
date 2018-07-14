@@ -21,7 +21,7 @@
     ></editor-form>
 
     <div class="table-wrapper">
-        <table class="body-table">
+        <table>
             <thead>
                 <tr>
                     <td v-for="header in headers"
@@ -37,13 +37,14 @@
                     @mouseover="hoveringContactId=contact.id"
                     @mouseleave="hoveringContactId=null"
                 >
-                    <td>{{ contact.first_name }}</td>
-                    <td>{{ contact.last_name }}</td>
-                    <td class="button-wrapper" v-if="hoveringOver(contact)">
-                        <button @click="openEditor(contact)">
+                    <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                    <td class="button-wrapper">
+                        <button @click="openEditor(contact)"
+                            v-show="hoveringOver(contact)">
                             <i class="fas fa-pen" title="Edit contact"></i>
                         </button>
-                        <button @click="deleteContact(contact)">
+                        <button @click="deleteContact(contact)"
+                            v-show="hoveringOver(contact)">
                             <i class="fas fa-trash" title="Remove contact"></i>
                         </button>
                     </td>
@@ -93,7 +94,8 @@ export default {
             return {};
         },
         headers: function() {
-            return ['First Name', 'Last Name', 'Edit'];
+            return ['All Contacts'];
+            // return ['First Name', 'Last Name', 'Edit'];
         }
     },
 
@@ -178,6 +180,8 @@ export default {
 
 
 <style scoped>
+/****************************************************************************/
+/* Input Styles */
 .contact-list {
     margin: 1em;
 }
@@ -220,45 +224,48 @@ button.add-contact:hover {
 .button-wrapper button:hover {
     color: hsl(89, 100%, 55%);
 }
-/* Light up row when user hovers */
+
+/****************************************************************************/
+/* Table Styles */
 .table-wrapper {
     position: relative;
 }
 table {
     border-collapse: collapse;
     position: relative;
+    margin-top: 2em;
+    font-size: 1.1em;
 }
 .table-wrapper, table {
     width: 100%;
 }
-.body-table tr:hover {
-    background-color: #444;
-}
-.body-table tr {
-    cursor: pointer;
+table tr {
+    width: 100%;
     text-transform: capitalize;
     height: 2em;
+}
+table tbody tr {
+    cursor: pointer;
+    padding-top: 1em;
+}
+/* Light up row when user hovers */
+table tbody tr:hover {
+    background-color: #444;
 }
 table tr td {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-
-}
-.head-table {
-    position: absolute;
-    z-index: 1;
-    height: 2em;
-    color: #ccc;
-}
-.body-table {
-    position: absolute;
-    top: 2em;
-}
-thead {
-    display: table-header-group;
-}
-td {
     width: 8em;
 }
-
+/* Header style */
+table thead tr td {
+    font-size: 1.2em;
+    color: hsl(89, 43%, 84%);
+    border-bottom: 1px solid hsl(89, 35%, 28%);
+    border-spacing: 0;
+    padding-bottom: 0;
+}
+table i {
+    font-size: 0.9em;
+}
 </style>
