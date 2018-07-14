@@ -59,6 +59,13 @@ module.exports = {
 
         // Cache processed files to reduce build time
         new HardSourceWebpackPlugin(),
+
+        // Constant for API URL
+        new webpack.DefinePlugin({
+            'process.env': {
+                'API_URL': apiUrl()
+            }
+        })
     ],
 
     // optimization: {
@@ -78,4 +85,11 @@ function vueScript() {
     return process.env.NODE_ENV === 'production'
         ? 'vue/dist/vue.min.js'
         : 'vue/dist/vue.js';
+}
+
+function apiUrl() {
+    return JSON.stringify(process.env.NODE_ENV === 'production'
+        ? 'https://nathanclonts.com/contact-manager/api/'
+        : 'http://127.0.0.0:5000/api/'
+    );
 }

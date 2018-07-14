@@ -35,6 +35,7 @@
     "ramda": "^0.25.0",
     "vue": "^2.5.16",
     "vue-loader": "^15.2.4",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.16.0"
   }
 }

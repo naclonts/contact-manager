@@ -44,7 +44,8 @@ export async function deleteContact(contact) {
  * @return {Response}
  */
 async function request(url, method='GET', body={}) {
-    let apiUrl = 'http://127.0.0.1:5000/api/' + url;
+    // let apiUrl = 'http://127.0.0.1:5000/api/' + url;
+    let apiUrl = process.env.API_URL + url;
     let options = {
         method: method,
         headers: {
