@@ -68,16 +68,16 @@ module.exports = {
         })
     ],
 
-    // optimization: {
-    //     minimizer: [
-    //         // Minimize JavaScript output
-    //         new UglifyJsPlugin({
-    //             sourceMap: true,
-    //             parallel: true,
-    //             cache: true
-    //         })
-    //     ]
-    // }
+    optimization: {
+        minimizer: [
+            // Minimize JavaScript output
+            new UglifyJsPlugin({
+                sourceMap: true,
+                parallel: true,
+                cache: true
+            })
+        ]
+    }
 };
 
 
