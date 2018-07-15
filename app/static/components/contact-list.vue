@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 <tr v-for="contact in contacts"
-                    v-if="visible(contact)"
+                    v-show="visible(contact)"
                     @mouseover="hoveringContactId=contact.id"
                     @mouseleave="hoveringContactId=null"
                 >
