@@ -44,11 +44,11 @@
                     <td>
                         <div class="button-wrapper">
                             <button @click="edit(contact)"
-                                v-show="hoveringOver(contact)">
+                                v-show="hoveringOver(contact) || !bigScreen">
                                 <i class="fas fa-pen" title="Edit contact"></i>
                             </button>
                             <button @click="deleteContact(contact)"
-                                v-show="hoveringOver(contact)">
+                                v-show="hoveringOver(contact) || !bigScreen">
                                 <i class="fas fa-trash" title="Remove contact"></i>
                             </button>
                         </div>
@@ -348,6 +348,6 @@ table i {
 }
 .undo-box button {
     border-radius: 2px;
-    padding: 0 0.em;
+    padding: 4px;
 }
 </style>

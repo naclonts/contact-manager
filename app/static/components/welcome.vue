@@ -93,11 +93,11 @@ em {
 }
 button {
     padding: 0.5em;
-    height: 2em;
+    height: 3em;
 }
 
 .footer {
-    position: fixed;
+    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
