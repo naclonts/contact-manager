@@ -1,4 +1,8 @@
-"""This module manages contact information, including saving and retrieving data."""
+"""
+Definitions for User and Contact database models.
+
+Models are implemented with SQLAlchemy to more easily handle database actions.
+"""
 
 import uuid
 import sys
