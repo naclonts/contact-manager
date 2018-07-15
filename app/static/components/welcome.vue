@@ -21,8 +21,8 @@
         <div class="bottom-row">
             <button @click="$emit('exit-welcome')" class="green">Let's Go</button>
 
-            <!-- Cat face! -->
-            <svg id="root-svg" ref="catFace"
+            <!-- Cat face! Skip on mobile. -->
+            <svg v-if="prettyBigScreen" id="root-svg" ref="catFace"
                 width="200" height="200" xmlns="http://www.w3.org/2000/svg">
                  <defs>
                      <linearGradient id="whisker-gradient"
@@ -56,6 +56,13 @@ import { drawCat } from '../javascript/draw-cat';
 export default {
     mounted() {
         drawCat('hsl(89, 100%, 55%)', 'black', this.$refs.catFace);
+    },
+
+    computed: {
+        // Is the screen big enough to fit this cat head?
+        prettyBigScreen: function() {
+            return window.innerWidth > 500;
+        }
     }
 }
 </script>

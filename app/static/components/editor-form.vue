@@ -164,7 +164,7 @@ export default {
         save: function() {
             // validate that first name has been filled
             if (!this.contact.first_name) {
-                this.message = `First name must be filled in.`;
+                this.message = `First Name required.`;
                 window.scrollTo(0, 0);
                 return;
             }
