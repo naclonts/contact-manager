@@ -32,9 +32,6 @@
                     @mouseover="hoveringContactId=contact.id"
                     @mouseleave="hoveringContactId=null"
                 >
-                    <td @click="view(contact)" class="initial-cell">
-                        <h1>{{ contact.first_name[0] }}</h1>
-                    </td>
                     <td @click="view(contact)">
                         {{ contact.first_name }} {{ contact.last_name }}
                     </td>
@@ -103,7 +100,6 @@ export default {
             this.openEditor(contact, false);
         },
         edit: function(contact) {
-            console.log('edit')
             this.openEditor(contact, true);
         },
         openEditor: function(contact, openInEditMode=true) {
@@ -122,6 +118,7 @@ export default {
                 this.contacts[i] = contact;
             // If this contact doesn't exist, add it
             } else {
+                contact.color = randomColor();
                 let res = await api.addContact(contact);
                 console.log(res.message);
                 contact.id = res.id;
@@ -174,15 +171,19 @@ export default {
                 || matchArray(contact.emails);
         },
 
-        viewDetail: function(contact) {
-            // TODO: implement!
-            console.log(`View ${contact.first_name}`);
-        },
-
         hoveringOver: function(contact) {
             return this.hoveringContactId == contact.id;
         }
     }
+}
+
+
+function randomColor() {
+    let colors = [
+        'cadetblue', 'chocolate', 'darkblue', 'darkgreen', 'darkorchid',
+        'darksalmon', 'darkviolet', 'gray', 'orangered', 'seagreen', 'tomato'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
 }
 </script>
 
@@ -248,7 +249,6 @@ button.add-contact:hover {
     position: relative;
 }
 table {
-    table-layout: fixed;
     border-collapse: collapse;
     position: relative;
     margin-top: 2em;
@@ -273,7 +273,6 @@ table tbody tr:hover {
 table tr td {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    width: 3em;
 }
 /* Header style */
 thead {
@@ -283,7 +282,27 @@ thead {
     border-spacing: 0;
     padding-bottom: 0;
 }
+/* Icons */
 table i {
     font-size: 0.9em;
+}
+/* Initial of first name */
+.initial-cell {
+    width: 1em;
+}
+.initial-cell div {
+    width: 2em;
+    background-color: blue;
+    color: inherit;
+    border-radius: 50%;
+}
+.initial-cell h1 {
+    width: 1em;
+    height: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6px 0 0 1px;
 }
 </style>

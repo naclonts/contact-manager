@@ -22,52 +22,70 @@
             {{ message }}
         </p>
 
-        <input v-model="contact.first_name" placeholder="First name"
-            :readonly="!editMode" />
-        <input v-model="contact.last_name" placeholder="Last name"
-            :readonly="!editMode" v-if="contact.last_name || editMode"/>
-        <br />
+        <div>
+            <label>Name</label>
+            <input v-model="contact.first_name" v-if="contact.first_name || editMode"
+            placeholder="First name"
+            :readonly="!editMode"
+            :class="{ readonly: !editMode }"
+            />
+            <input v-model="contact.last_name" v-if="contact.last_name || editMode"
+            placeholder="Last name"
+            :readonly="!editMode"
+            :class="{ readonly: !editMode }"
+            />
+        </div>
 
         <div v-if="contact.date_of_birth || editMode">
             <label>Birthday</label>
-            <input v-model="contact.date_of_birth" placeholder="Birthday"
-                type="date" :readonly="!editMode"
+            <input v-model="contact.date_of_birth"
+                type="date"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
             />
         </div>
-        <br />
 
-        <label v-if="phone_numbers.length || editMode">Phone Numbers</label>
-        <button v-if="editMode" title="Add Phone Number"
-            @click="addBlankTo('phone_numbers')">
-            +
-        </button>
-        <input v-for="(num, i) in phone_numbers"
-            v-model="num.value"
-            :placeholder="'num ' + i"
-            :readonly="!editMode"
-        />
+        <div v-if="phone_numbers.length || editMode">
+            <label>Phone Numbers</label>
+            <button v-if="editMode" title="Add Phone Number"
+                @click="addBlankTo('phone_numbers')">
+                +
+            </button>
+            <input v-for="(num, i) in phone_numbers"
+                v-model="num.value"
+                :placeholder="'num ' + i"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
+            />
+        </div>
 
-        <label v-if="emails.length || editMode">Emails</label>
-        <button v-if="editMode" title="Add Email"
-            @click="addBlankTo('emails')">
-            +
-        </button>
-        <input v-for="(email, i) in emails"
-            v-model="email.value"
-            :placeholder="'Email ' + i"
-            :readonly="!editMode"
-        />
+        <div v-if="emails.length || editMode">
+            <label>Emails</label>
+            <button v-if="editMode" title="Add Email"
+                @click="addBlankTo('emails')">
+                +
+            </button>
+            <input v-for="(email, i) in emails"
+                v-model="email.value"
+                :placeholder="'Email ' + i"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
+            />
+        </div>
 
-        <label v-if="addresses.length || editMode">Addresses</label>
-        <button v-if="editMode" title="Add Address"
-            @click="addBlankTo('addresses')">
-            +
-        </button>
-        <input v-for="(address, i) in addresses"
-            v-model="address.value"
-            :placeholder="'Address ' + i"
-            :readonly="!editMode"
-        />
+        <div v-if="addresses.length || editMode">
+            <label>Addresses</label>
+            <button v-if="editMode" title="Add Address"
+                @click="addBlankTo('addresses')">
+                +
+            </button>
+            <input v-for="(address, i) in addresses"
+                v-model="address.value"
+                :placeholder="'Address ' + i"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
+            />
+        </div>
 
         <div class="button-wrapper" v-if="editMode">
             <button @click="save" class="save">Save</button>
@@ -166,6 +184,14 @@ function saveArray(array) {
     // return `truth-y` values
     return array.map((a) => a.value).filter((a) => !!a);
 }
+
+function randomColor() {
+    let colors = [
+        'cadetblue', 'chocolate', 'darkblue', 'darkgreen', 'darkorchid',
+        'darksalmon', 'darkviolet', 'gray', 'orangered', 'seagreen', 'tomato'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
 </script>
 
 
@@ -179,7 +205,8 @@ function saveArray(array) {
     z-index: 10;
     background-color: hsla(0, 0%, 39%, 0.88);
 }
-div.header {
+.modal > div.header {
+    margin: 0.5em 0 0 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -214,14 +241,17 @@ div.header {
     width: 100%;
     line-height: 1.5em;
 }
+.modal > div {
+    margin-top: 0;
+}
 .modal h2 {
     margin: 0 0 0.5em 0;
 }
 .modal label {
     display: block;
-    font-size: 0.75em;
+    font-size: 0.85em;
     margin: 0;
-    color: #666;
+    color: hsl(89, 100%, 50%);
 }
 .modal .button-wrapper {
     display: flex;
@@ -231,7 +261,13 @@ div.header {
 .modal .button-wrapper button {
     width: 45%;
 }
-.modal > input {
+.modal input {
+    width: 100%;
     margin-top: 0;
+    border: 1px solid #666;
+    padding-left: 2px;
+}
+.modal input.readonly {
+    border: none;
 }
 </style>
