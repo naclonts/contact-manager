@@ -90,7 +90,7 @@ export default {
                 ? -1 : +1;
         });
         this.contacts = contactList;
-        if (true || this.contacts.length == 0) this.$emit('no-contacts-loaded');
+        if (this.contacts.length == 0) this.$emit('no-contacts-loaded');
 
         // Listen for window resizes to adjust displayed columns
         window.addEventListener('resize', this.resize);
