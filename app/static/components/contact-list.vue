@@ -24,12 +24,7 @@
     <div class="table-wrapper">
         <table>
             <thead>
-                <tr>
-                    <td v-for="header in headers"
-                        @click="sortByHeader(header)">
-                        {{ header }}
-                    </td>
-                </tr>
+                All Contacts
             </thead>
             <tbody>
                 <tr v-for="contact in contacts"
@@ -37,18 +32,23 @@
                     @mouseover="hoveringContactId=contact.id"
                     @mouseleave="hoveringContactId=null"
                 >
+                    <td @click="view(contact)" class="initial-cell">
+                        <h1>{{ contact.first_name[0] }}</h1>
+                    </td>
                     <td @click="view(contact)">
                         {{ contact.first_name }} {{ contact.last_name }}
                     </td>
-                    <td class="button-wrapper">
-                        <button @click="edit(contact)"
-                            v-show="hoveringOver(contact)">
-                            <i class="fas fa-pen" title="Edit contact"></i>
-                        </button>
-                        <button @click="deleteContact(contact)"
-                            v-show="hoveringOver(contact)">
-                            <i class="fas fa-trash" title="Remove contact"></i>
-                        </button>
+                    <td>
+                        <div class="button-wrapper">
+                            <button @click="edit(contact)"
+                                v-show="hoveringOver(contact)">
+                                <i class="fas fa-pen" title="Edit contact"></i>
+                            </button>
+                            <button @click="deleteContact(contact)"
+                                v-show="hoveringOver(contact)">
+                                <i class="fas fa-trash" title="Remove contact"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -95,9 +95,6 @@ export default {
     computed: {
         newContact: function() {
             return {};
-        },
-        headers: function() {
-            return ['All Contacts'];
         }
     },
 
@@ -225,6 +222,15 @@ button.add-contact:hover {
                 0 1px 18px 0 rgba(0,0,0,0.24),
                 0 3px 5px -1px rgba(0,0,0,0.4);
 }
+
+/* Wrapper for contact-editing buttons that show up on hover */
+.button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+}
 .button-wrapper button {
     background-color: transparent;
     line-height: 1em;
@@ -242,6 +248,7 @@ button.add-contact:hover {
     position: relative;
 }
 table {
+    table-layout: fixed;
     border-collapse: collapse;
     position: relative;
     margin-top: 2em;
@@ -253,7 +260,7 @@ table {
 table tr {
     width: 100%;
     text-transform: capitalize;
-    height: 2em;
+    height: 2.5em;
 }
 table tbody tr {
     cursor: pointer;
@@ -266,10 +273,10 @@ table tbody tr:hover {
 table tr td {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
-    width: 8em;
+    width: 3em;
 }
 /* Header style */
-table thead tr td {
+thead {
     font-size: 1.2em;
     color: hsl(89, 43%, 84%);
     border-bottom: 1px solid hsl(89, 35%, 28%);

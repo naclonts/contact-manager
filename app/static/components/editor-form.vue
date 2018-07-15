@@ -18,6 +18,10 @@
             </div>
         </div>
 
+        <p class="message" v-if="message">
+            {{ message }}
+        </p>
+
         <input v-model="contact.first_name" placeholder="First name"
             :readonly="!editMode" />
         <input v-model="contact.last_name" placeholder="Last name"
@@ -96,7 +100,8 @@ export default {
             phone_numbers: [],
             emails: [],
             addresses: [],
-            editMode: true
+            editMode: true,
+            message: null
         };
     },
 
@@ -117,6 +122,12 @@ export default {
 
     methods: {
         save: function() {
+            // validate that first name has been filled
+            if (!this.contact.first_name) {
+                this.message = `First name must be filled in.`;
+                window.scrollTo(0, 0);
+                return;
+            }
             // capitalize names
             function capitalize(s) {
                 if (!s) return null;
@@ -129,6 +140,7 @@ export default {
             this.contact.emails = saveArray(this.emails);
             this.contact.addresses = saveArray(this.addresses);
             this.$emit('save', clone(this.contact));
+            this.message = null;
         },
         cancel: function() {
             this.$emit('cancel');
@@ -183,6 +195,9 @@ div.header {
     color: inherit;
 }
 .window-buttons button:hover {
+    color: hsl(89, 95%, 54%);
+}
+.message {
     color: hsl(89, 95%, 54%);
 }
 .modal {
