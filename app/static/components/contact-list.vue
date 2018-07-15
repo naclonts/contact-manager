@@ -1,8 +1,9 @@
 /**
- * Component that displays a list of contacts.
+ * Display an editable list of contacts, with a search box and export feature.
  */
 <template>
 <div class="contact-list">
+    <!-- Add Contact and Search input -->
     <button class="add-contact green"
         @click="edit(newContact)"
         title="Add contact"
@@ -14,6 +15,7 @@
         />
     </div>
 
+    <!-- Editor modal when contacts are viewed or modified -->
     <editor-form v-if="showEditorForm"
         :contact="editingContact"
         :startInEditMode="openContactInEditMode"
@@ -21,6 +23,7 @@
         @cancel="cancelForm"
     ></editor-form>
 
+    <!-- The list itself -->
     <div class="table-wrapper">
         <table>
             <thead>
@@ -55,14 +58,22 @@
         </table>
     </div>
 
+    <!-- Show Undo option when contacts are deleted -->
+    <div v-if="showUndo" class="undo-box">
+        <p>Contact Deleted.</p>
+        <button @click="cancelDelete()">Undo</button>
+    </div>
+
 </div>
 </template>
 
 <script>
 'use strict';
+
 import * as api from '../javascript/api';
 import EditorForm from './editor-form.vue';
 const clone = require('ramda/src/clone');
+
 
 export default {
     data() {
@@ -74,7 +85,10 @@ export default {
             timeoutId: null,
             searchText: '',
             hoveringContactId: null,
-            windowWidth: 0
+            windowWidth: 0,
+            showUndo: false,
+            deletedContacts: [],
+            deletedTimeouts: []
         }
     },
 
@@ -82,6 +96,7 @@ export default {
         'editor-form': EditorForm
     },
 
+    // Load contacts when mounted
     async mounted() {
         // Get user's contacts and sort by name
         let contactList = await api.getContacts();
@@ -105,12 +120,14 @@ export default {
         newContact: function() {
             return {};
         },
+        // Check for displaying phone number field in list
         bigScreen: function() {
             return this.windowWidth > 700;
         }
     },
 
     methods: {
+        // Methods to view and edit contact
         view: function(contact) {
             this.openEditor(contact, false);
         },
@@ -123,6 +140,7 @@ export default {
             this.showEditorForm = true;
         },
 
+        // Save an updated contact to the server
         saveForm: async function(contact) {
             let i = this.index(contact);
             // If this contact already exists, update it
@@ -143,24 +161,43 @@ export default {
             this.showEditorForm = false;
         },
 
+        // Close modal without saving
         cancelForm: function() {
             this.showEditorForm = false;
         },
 
+        // Delete contact. Gives 3 seconds before actually deleting from server,
+        // giving user chance to undo.
         deleteContact: function(contact) {
-            // Delete from server after 3 seconds, to give user a chance to Undo
-            async function trulyDelete() {
-                console.log(await api.deleteContact(contact));
-                this.timeoutId = null;
-            }
             this.contacts.splice(this.index(contact), 1);
-            this.timeoutId = setTimeout(trulyDelete, 3000);
+            this.showUndo = true;
+            this.deletedContacts.push(contact);
+            this.deletedTimeouts.push(
+                setTimeout(this.deleteFromServer.bind(this), 5000)
+            );
+        },
+        // Actually delete from server if user hasn't undone action
+        deleteFromServer: async function(contact) {
+            this.showUndo = false;
+            clearTimeout(this.deletedTimeouts.shift());
+            await api.deleteContact(this.deletedContacts.shift());
+        },
+        // Undo delete action
+        cancelDelete: function() {
+            this.showUndo = false;
+            clearTimeout(this.deletedTimeouts.shift());
+            this.contacts.push(this.deletedContacts.shift());
         },
 
         index: function(contact) {
             return this.contacts.findIndex((c) => c.id == contact.id);
         },
 
+        /**
+         * Check if contact should be displayed, based on current search text.
+         * @param  {Contact} contact
+         * @return {Boolean} true if contact should be displayed
+         */
         visible: function(contact) {
             let text = this.searchText.toLowerCase();
             // Show everything when there hasn't been a search
@@ -218,6 +255,7 @@ function randomColor() {
     margin-bottom: 0;
 }
 .search input {
+    width: calc(100% - 3em);
     border: none;
     margin: 0.25em;
     margin-bottom: 0;
@@ -227,6 +265,10 @@ function randomColor() {
 }
 button.add-contact {
     font-size: 1.5em;
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    z-index: 1;
 }
 
 /* Wrapper for contact-editing buttons that show up on hover */
@@ -283,7 +325,7 @@ table tr td {
 /* Header style */
 thead {
     font-size: 1.2em;
-    color: hsl(89, 43%, 84%);
+    color: hsl(89, 100%, 72%);
     border-bottom: 1px solid hsl(89, 35%, 28%);
     border-spacing: 0;
     padding-bottom: 0;
@@ -292,23 +334,20 @@ thead {
 table i {
     font-size: 0.9em;
 }
-/* Initial of first name */
-.initial-cell {
-    width: 1em;
+
+/* Box to undo delete */
+.undo-box {
+    position: fixed;
+    right: 1em;
+    top: 1em;
+    border-radius: 2px;
+    padding: 1em;
+    z-index: 10;
+    background-color: white;
+    color: #333;
 }
-.initial-cell div {
-    width: 2em;
-    background-color: blue;
-    color: inherit;
-    border-radius: 50%;
-}
-.initial-cell h1 {
-    width: 1em;
-    height: 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 6px 0 0 1px;
+.undo-box button {
+    border-radius: 2px;
+    padding: 0 0.em;
 }
 </style>
