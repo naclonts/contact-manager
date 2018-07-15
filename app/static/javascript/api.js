@@ -9,12 +9,6 @@
 export async function getContacts() {
     let response = await request('contacts');
     return await response.json();
-    // convert date strings to Date objects
-    // return contacts.map((c) => {
-    //     c.date_of_birth = c.date_of_birth
-    //                     ? new Date(c.date_of_birth) : null;
-    //     return c;
-    // });
 }
 
 /**
