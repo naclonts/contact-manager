@@ -186,11 +186,17 @@ export default {
             this.$emit('cancel');
         },
         /**
-         * Add empty `value` object to one of the arrays
+         * Add empty `value` object to one of the arrays. Scrolls window down
+         * to bring into view, if needed.
          * @param  {String} arrayName addresses, emails, or phone_numbers
          */
         addBlankTo: function(arrayName) {
             this[arrayName].push({ value: '' });
+            // make sure bottom of modal is still visible so user can save
+            let elRect = this.$el.getBoundingClientRect();
+            if (elRect.bottom > window.innerHeight) {
+                window.scrollBy(0, 50);
+            }
         }
     }
 }
