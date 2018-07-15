@@ -35,6 +35,9 @@
                     <td @click="view(contact)">
                         {{ contact.first_name }} {{ contact.last_name }}
                     </td>
+                    <td v-if="bigScreen" @click="view(contact)">
+                        {{ contact.phone_numbers ? contact.phone_numbers[0] : '' }}
+                    </td>
                     <td>
                         <div class="button-wrapper">
                             <button @click="edit(contact)"
@@ -72,6 +75,7 @@ export default {
             timeoutId: null,
             searchText: '',
             hoveringContactId: null,
+            windowWidth: 0
         }
     },
 
@@ -80,18 +84,29 @@ export default {
     },
 
     async mounted() {
+        // Get user's contacts and sort by name
         let contactList = await api.getContacts();
-        // sort by name
         contactList.sort((a, b) => {
             return a.first_name.toLowerCase() < b.first_name.toLowerCase()
                 ? -1 : +1;
         });
         this.contacts = contactList;
+
+        // Listen for window resizes to adjust displayed columns
+        window.addEventListener('resize', this.resize);
+        this.resize();
+    },
+
+    beforeDestroy() {
+        window.removeEventListener('resize', this.resize);
     },
 
     computed: {
         newContact: function() {
             return {};
+        },
+        bigScreen: function() {
+            return this.windowWidth > 700;
         }
     },
 
@@ -173,6 +188,10 @@ export default {
 
         hoveringOver: function(contact) {
             return this.hoveringContactId == contact.id;
+        },
+
+        resize: function() {
+            this.windowWidth = window.innerWidth;
         }
     }
 }
@@ -239,6 +258,7 @@ button.add-contact {
     position: relative;
 }
 table {
+    table-layout: fixed;
     border-collapse: collapse;
     position: relative;
     margin-top: 2em;

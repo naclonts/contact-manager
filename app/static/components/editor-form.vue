@@ -54,7 +54,7 @@
             </button>
             <input v-for="(num, i) in phone_numbers"
                 v-model="num.value"
-                :placeholder="'num ' + i"
+                :placeholder="'Number ' + i"
                 :readonly="!editMode"
                 :class="{ readonly: !editMode }"
             />
