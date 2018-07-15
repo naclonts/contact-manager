@@ -32,6 +32,28 @@
         </div>
         <br />
 
+        <label v-if="phone_numbers.length || editMode">Phone Numbers</label>
+        <button v-if="editMode" title="Add Phone Number"
+            @click="addBlankTo('phone_numbers')">
+            +
+        </button>
+        <input v-for="(num, i) in phone_numbers"
+            v-model="num.value"
+            :placeholder="'num ' + i"
+            :readonly="!editMode"
+        />
+
+        <label v-if="emails.length || editMode">Emails</label>
+        <button v-if="editMode" title="Add Email"
+            @click="addBlankTo('emails')">
+            +
+        </button>
+        <input v-for="(email, i) in emails"
+            v-model="email.value"
+            :placeholder="'Email ' + i"
+            :readonly="!editMode"
+        />
+
         <label v-if="addresses.length || editMode">Addresses</label>
         <button v-if="editMode" title="Add Address"
             @click="addBlankTo('addresses')">
@@ -71,13 +93,19 @@ export default {
 
     data () {
         return {
+            phone_numbers: [],
+            emails: [],
             addresses: [],
             editMode: true
         };
     },
 
     mounted: function() {
+        // set up arrays properly to allow v-model'ing
+        this.phone_numbers = loadArray(this.contact.phone_numbers);
+        this.emails = loadArray(this.contact.emails);
         this.addresses = loadArray(this.contact.addresses);
+        // initialize editing status based on parent
         this.editMode = this.startInEditMode;
     },
 
@@ -97,6 +125,8 @@ export default {
             this.contact.first_name = capitalize(this.contact.first_name);
             this.contact.last_name = capitalize(this.contact.last_name);
             // format arrays properly
+            this.contact.phone_numbers = saveArray(this.phone_numbers);
+            this.contact.emails = saveArray(this.emails);
             this.contact.addresses = saveArray(this.addresses);
             this.$emit('save', clone(this.contact));
         },
@@ -185,5 +215,8 @@ div.header {
 }
 .modal .button-wrapper button {
     width: 45%;
+}
+.modal > input {
+    margin-top: 0;
 }
 </style>
