@@ -2,8 +2,9 @@
  * Modal form to add a new contact.
  */
 <template>
-<div class="new-contact">
+<div class="editor-wrapper">
     <div class="modal">
+        <!-- Control buttons in the header -->
         <div class="header">
             <h2>
                 <span v-if="addingNewContact">Add Contact</span>
@@ -22,6 +23,8 @@
             {{ message }}
         </p>
 
+
+        <!-- Name and date of birth fields -->
         <div>
             <label>Name</label>
             <input v-model="contact.first_name" v-if="contact.first_name || editMode"
@@ -45,6 +48,10 @@
             />
         </div>
 
+
+        <!-- The array-based fields take a little more boilerplate. -->
+        <!-- If more fields like this are added, consider creating a new
+                component type to wrap them. -->
         <div class="field-wrapper" v-if="phone_numbers.length || editMode">
             <label>Phone Numbers</label>
             <button class="add-line green" v-if="editMode"
@@ -52,12 +59,16 @@
                 @click="addBlankTo('phone_numbers')">
                 +
             </button>
-            <input v-for="(num, i) in phone_numbers"
-                v-model="num.value"
-                :placeholder="'Number ' + i"
-                :readonly="!editMode"
-                :class="{ readonly: !editMode }"
-            />
+            <div class="lines-wrapper" v-for="(num, i) in phone_numbers">
+                <input
+                    v-model="num.value"
+                    :placeholder="'Phone Number ' + (i+1)"
+                    :readonly="!editMode"
+                    :class="{ readonly: !editMode }"
+                />
+                <button class="delete-line" @click="phone_numbers.splice(i, 1)"
+                    v-if="editMode" title="Remove">X</button>
+            </div>
         </div>
 
         <div class="field-wrapper" v-if="emails.length || editMode">
@@ -67,12 +78,16 @@
                 @click="addBlankTo('emails')">
                 +
             </button>
-            <input v-for="(email, i) in emails"
-                v-model="email.value"
-                :placeholder="'Email ' + i"
-                :readonly="!editMode"
-                :class="{ readonly: !editMode }"
-            />
+            <div class="lines-wrapper" v-for="(email, i) in emails">
+                <input
+                    v-model="email.value"
+                    :placeholder="'Email ' + (i+1)"
+                    :readonly="!editMode"
+                    :class="{ readonly: !editMode }"
+                />
+                <button class="delete-line" @click="emails.splice(i, 1)"
+                    v-if="editMode" title="Remove">X</button>
+            </div>
         </div>
 
         <div class="field-wrapper" v-if="addresses.length || editMode">
@@ -82,12 +97,16 @@
                 @click="addBlankTo('addresses')">
                 +
             </button>
-            <input v-for="(address, i) in addresses"
-                v-model="address.value"
-                :placeholder="'Address ' + i"
-                :readonly="!editMode"
-                :class="{ readonly: !editMode }"
-            />
+            <div class="lines-wrapper" v-for="(address, i) in addresses">
+                <input
+                    v-model="address.value"
+                    :placeholder="'Address ' + (i+1)"
+                    :readonly="!editMode"
+                    :class="{ readonly: !editMode }"
+                />
+                <button class="delete-line" @click="addresses.splice(i, 1)"
+                    v-if="editMode" title="Remove">X</button>
+            </div>
         </div>
 
         <div class="button-wrapper" v-if="editMode">
@@ -199,7 +218,7 @@ function randomColor() {
 
 
 <style scoped>
-.new-contact {
+.editor-wrapper {
     position: absolute;
     top: 0;
     left: 0;
@@ -233,7 +252,7 @@ function randomColor() {
 .modal {
     display: flex;
     flex-direction: column;
-    background-color: hsl(216, 66%, 12%);
+    background-color: #282828;
     margin: 2em auto;
     max-width: 20em;
     padding: 1em;
@@ -259,13 +278,30 @@ function randomColor() {
     margin: 0;
     color: hsl(89, 100%, 50%);
 }
-.modal button.add-line {
+
+/* Buttons and inputs */
+.modal .lines-wrapper {
+    position: relative;
+}
+.modal button.add-line,
+.modal button.delete-line {
     min-width: 0;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1em;
+    height: 1em;
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 0.25em;
+}
+.modal button.add-line {
+    z-index: 10;
+}
+.modal button.delete-line {
+    background-color: transparent;
+    color: hsl(0, 100%, 52%);
+    right: 1em;
+}
+.modal button.delete-line:hover {
+    color: hsl(0, 100%, 64%);
 }
 .modal .button-wrapper {
     display: flex;

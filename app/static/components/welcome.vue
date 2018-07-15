@@ -12,7 +12,7 @@
             This is an app to track your contacts, with a touch of old-school computing nostalgia.
         </p>
         <p>
-            No login is required to use this site. Because of this, contacts entered will only show up on the device you enter them on.
+            No login is required to use this site. Because of this, contacts will only be seen on the device used to create them.
         </p>
         <p>
             Enjoy!
