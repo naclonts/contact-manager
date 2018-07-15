@@ -62,7 +62,6 @@
 'use strict';
 import * as api from '../javascript/api';
 import EditorForm from './editor-form.vue';
-import * as moment from 'moment';
 const clone = require('ramda/src/clone');
 
 export default {
@@ -91,6 +90,7 @@ export default {
                 ? -1 : +1;
         });
         this.contacts = contactList;
+        if (true || this.contacts.length == 0) this.$emit('no-contacts-loaded');
 
         // Listen for window resizes to adjust displayed columns
         window.addEventListener('resize', this.resize);
@@ -159,10 +159,6 @@ export default {
 
         index: function(contact) {
             return this.contacts.findIndex((c) => c.id == contact.id);
-        },
-
-        formatDate: function(date) {
-            return moment(date).format('M/D/YYYY');
         },
 
         visible: function(contact) {

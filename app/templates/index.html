@@ -13,7 +13,13 @@
 <body>
     <!-- Main wrapper for Vue -->
     <div id="app">
-        <contact-list></contact-list>
+        <welcome v-if="showWelcomeScreen"
+            @exit-welcome="showWelcomeScreen = false"
+        ></welcome>
+
+        <contact-list
+            @no-contacts-loaded="showWelcomeScreen = true"
+        ></contact-list>
     </div>
 </body>
 
