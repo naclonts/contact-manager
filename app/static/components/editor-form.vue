@@ -10,7 +10,7 @@
                 <span v-else-if="editMode">Edit Contact</span>
                 <span v-else>{{ contact.first_name }} {{ contact.last_name }}</span>
             </h2>
-            <div>
+            <div class="window-buttons">
                 <button v-if="!editMode" @click="editMode=true">
                     <i class="fas fa-pen" title="Edit contact"></i>
                 </button>
@@ -18,21 +18,29 @@
             </div>
         </div>
 
-        <input v-model="contact.first_name" placeholder="First name" />
-        <input v-model="contact.last_name" placeholder="Last name" />
+        <input v-model="contact.first_name" placeholder="First name"
+            :readonly="!editMode" />
+        <input v-model="contact.last_name" placeholder="Last name"
+            :readonly="!editMode" v-if="contact.last_name || editMode"/>
         <br />
 
-        <label>Birthday</label>
-        <input v-model="contact.date_of_birth" placeholder="Birthday"
-            type="date"
-        />
+        <div v-if="contact.date_of_birth || editMode">
+            <label>Birthday</label>
+            <input v-model="contact.date_of_birth" placeholder="Birthday"
+                type="date" :readonly="!editMode"
+            />
+        </div>
         <br />
 
-        <label>Addresses</label>
-        <button @click="addAddress" title="Add Address">+</button>
+        <label v-if="addresses.length || editMode">Addresses</label>
+        <button v-if="editMode" title="Add Address"
+            @click="addBlankTo('addresses')">
+            +
+        </button>
         <input v-for="(address, i) in addresses"
             v-model="address.value"
             :placeholder="'Address ' + i"
+            :readonly="!editMode"
         />
 
         <div class="button-wrapper" v-if="editMode">
@@ -95,8 +103,12 @@ export default {
         cancel: function() {
             this.$emit('cancel');
         },
-        addAddress: function() {
-            this.addresses.push({ value: '' });
+        /**
+         * Add empty `value` object to one of the arrays
+         * @param  {String} arrayName addresses, emails, or phone_numbers
+         */
+        addBlankTo: function(arrayName) {
+            this[arrayName].push({ value: '' });
         }
     }
 }
@@ -130,11 +142,17 @@ div.header {
     flex-direction: row;
     justify-content: space-between;
 }
-.header button {
+.window-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    min-width: 4em;
+}
+.window-buttons button {
     background-color: transparent;
     color: inherit;
 }
-.header button:hover {
+.window-buttons button:hover {
     color: hsl(89, 95%, 54%);
 }
 .modal {
@@ -155,6 +173,7 @@ div.header {
     margin: 0 0 0.5em 0;
 }
 .modal label {
+    display: block;
     font-size: 0.75em;
     margin: 0;
     color: #666;
