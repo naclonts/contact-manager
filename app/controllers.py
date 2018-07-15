@@ -19,8 +19,6 @@ def main_view():
     # Get current user
     if 'user_id' in session:
         user = User.query.filter_by(id=session['user_id']).first()
-        if user: print('Found user! ID {0}'.format(user.id))
-        else: print('User ID not found! ID {0}'.format(user.id))
     # Create user session if non-existent
     if user is None:
         user = User()
@@ -29,7 +27,6 @@ def main_view():
         session['user_id'] = str(user.id)
         session.modified = True
         session.permanent = True
-        print('set session uid to {0}'.format(session['user_id']))
     return response
 
 # API routes for CRUD actions on contacts
@@ -67,7 +64,6 @@ def delete_contact(c):
 
 def update_contact(contact_dict):
     contact = Contact.query.get(contact_dict['id'])
-    print(contact_dict)
 
     # Assign JSON fields to model
     for key, val in contact_dict.items():
