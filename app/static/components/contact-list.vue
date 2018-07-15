@@ -4,7 +4,7 @@
 <template>
 <div class="contact-list">
     <button class="add-contact"
-        @click="openEditor(newContact)"
+        @click="edit(newContact)"
         title="Add contact"
     >+</button>
     <div class="search">
@@ -16,6 +16,7 @@
 
     <editor-form v-if="showEditorForm"
         :contact="editingContact"
+        :startInEditMode="openContactInEditMode"
         @save="saveForm"
         @cancel="cancelForm"
     ></editor-form>
@@ -33,13 +34,14 @@
             <tbody>
                 <tr v-for="contact in contacts"
                     v-if="visible(contact)"
-                    @click="viewDetail(contact)"
                     @mouseover="hoveringContactId=contact.id"
                     @mouseleave="hoveringContactId=null"
                 >
-                    <td>{{ contact.first_name }} {{ contact.last_name }}</td>
+                    <td @click="view(contact)">
+                        {{ contact.first_name }} {{ contact.last_name }}
+                    </td>
                     <td class="button-wrapper">
-                        <button @click="openEditor(contact)"
+                        <button @click="edit(contact)"
                             v-show="hoveringOver(contact)">
                             <i class="fas fa-pen" title="Edit contact"></i>
                         </button>
@@ -68,10 +70,11 @@ export default {
         return {
             contacts: [],
             showEditorForm: false,
+            openContactInEditMode: true,
             editingContact: {},
             timeoutId: null,
             searchText: '',
-            hoveringContactId: null
+            hoveringContactId: null,
         }
     },
 
@@ -80,8 +83,8 @@ export default {
     },
 
     async mounted() {
-        console.log('Mounted contact list')
         let contactList = await api.getContacts();
+        // sort by name
         contactList.sort((a, b) => {
             return a.first_name.toLowerCase() < b.first_name.toLowerCase()
                 ? -1 : +1;
@@ -95,12 +98,19 @@ export default {
         },
         headers: function() {
             return ['All Contacts'];
-            // return ['First Name', 'Last Name', 'Edit'];
         }
     },
 
     methods: {
-        openEditor: function(contact) {
+        view: function(contact) {
+            this.openEditor(contact, false);
+        },
+        edit: function(contact) {
+            console.log('edit')
+            this.openEditor(contact, true);
+        },
+        openEditor: function(contact, openInEditMode=true) {
+            this.openContactInEditMode = openInEditMode;
             this.editingContact = clone(contact);
             this.showEditorForm = true;
         },

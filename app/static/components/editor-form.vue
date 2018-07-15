@@ -4,7 +4,12 @@
 <template>
 <div class="new-contact">
     <div class="modal">
-        <h2>Add/Edit Contact</h2>
+        <h2>
+            <span v-if="addingNewContact">Add Contact</span>
+            <span v-else-if="editMode">Edit Contact</span>
+            <span v-else>{{ contact.first_name }} {{ contact.last_name }}</span>
+        </h2>
+        <button title="Exit" @click="cancel"><i class="fas fa-times"></i></button>
 
         <input v-model="contact.first_name" placeholder="First name" />
 
@@ -27,7 +32,7 @@
         />
 
 
-        <div class="button-wrapper">
+        <div class="button-wrapper" v-if="editMode">
             <button @click="save" class="save">Save</button>
             <button @click="cancel" class="cancel">Cancel</button>
         </div>
@@ -46,21 +51,41 @@ export default {
         contact: {
             type: Object,
             default: () => { return {} }
+        },
+        startInEditMode: {
+            type: Boolean,
+            default: true
         }
     },
 
     data () {
         return {
-            addresses: []
+            addresses: [],
+            editMode: true
         };
     },
 
     mounted: function() {
         this.addresses = loadArray(this.contact.addresses);
+        this.editMode = this.startInEditMode;
+    },
+
+    computed: {
+        addingNewContact: function() {
+            return this.editMode && !this.contact.id;
+        }
     },
 
     methods: {
         save: function() {
+            // capitalize names
+            function capitalize(s) {
+                if (!s) return null;
+                return s[0].toUpperCase() + s.substr(1);
+            }
+            this.first_name = capitalize(this.first_name);
+            this.last_name = capitalize(this.last_name);
+            // format arrays properly
             this.contact.addresses = saveArray(this.addresses);
             this.$emit('save', clone(this.contact));
         },
