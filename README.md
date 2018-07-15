@@ -1,6 +1,8 @@
 # Contact Manager
 
-This is a lightweight SPA to record contacts, made with Flask and Vue.
+This is a lightweight demo SPA to record contacts, made with Flask and Vue.
+
+Data is only saved to sessions (no logins required), so this is only intended for demonstration purposes.
 
 ## Install
 This app requires PostgreSQL, Webpack, and NPM.
