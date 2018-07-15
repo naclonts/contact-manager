@@ -32,6 +32,7 @@ class Contact(db.Model):
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=True)
     date_of_birth = db.Column(db.Date, nullable=True)
+    color = db.Column(db.String(120), nullable=True)
     addresses = db.Column(ARRAY(db.String(200)), nullable=True)
     phone_numbers = db.Column(ARRAY(db.String(30)), nullable=True)
     emails = db.Column(ARRAY(db.String(120)), nullable=True)
