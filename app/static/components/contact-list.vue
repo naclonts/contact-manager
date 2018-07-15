@@ -3,7 +3,7 @@
  */
 <template>
 <div class="contact-list">
-    <button class="add-contact"
+    <button class="add-contact green"
         @click="edit(newContact)"
         title="Add contact"
     >+</button>
@@ -212,16 +212,6 @@ function randomColor() {
 }
 button.add-contact {
     font-size: 1.5em;
-    background-color: hsl(89, 100%, 55%);
-    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.28),
-                0 1px 18px 0 rgba(0,0,0,0.12),
-                0 3px 5px -1px rgba(0,0,0,0.4);
-}
-button.add-contact:hover {
-    background-color: hsl(89, 100%, 75%);
-    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.25),
-                0 1px 18px 0 rgba(0,0,0,0.24),
-                0 3px 5px -1px rgba(0,0,0,0.4);
 }
 
 /* Wrapper for contact-editing buttons that show up on hover */

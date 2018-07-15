@@ -25,14 +25,14 @@
         <div>
             <label>Name</label>
             <input v-model="contact.first_name" v-if="contact.first_name || editMode"
-            placeholder="First name"
-            :readonly="!editMode"
-            :class="{ readonly: !editMode }"
+                placeholder="First name"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
             />
             <input v-model="contact.last_name" v-if="contact.last_name || editMode"
-            placeholder="Last name"
-            :readonly="!editMode"
-            :class="{ readonly: !editMode }"
+                placeholder="Last name"
+                :readonly="!editMode"
+                :class="{ readonly: !editMode }"
             />
         </div>
 
@@ -45,9 +45,10 @@
             />
         </div>
 
-        <div v-if="phone_numbers.length || editMode">
+        <div class="field-wrapper" v-if="phone_numbers.length || editMode">
             <label>Phone Numbers</label>
-            <button v-if="editMode" title="Add Phone Number"
+            <button class="add-line green" v-if="editMode"
+                title="Add Phone Number"
                 @click="addBlankTo('phone_numbers')">
                 +
             </button>
@@ -59,9 +60,10 @@
             />
         </div>
 
-        <div v-if="emails.length || editMode">
+        <div class="field-wrapper" v-if="emails.length || editMode">
             <label>Emails</label>
-            <button v-if="editMode" title="Add Email"
+            <button class="add-line green" v-if="editMode"
+                title="Add Email"
                 @click="addBlankTo('emails')">
                 +
             </button>
@@ -73,9 +75,10 @@
             />
         </div>
 
-        <div v-if="addresses.length || editMode">
+        <div class="field-wrapper" v-if="addresses.length || editMode">
             <label>Addresses</label>
-            <button v-if="editMode" title="Add Address"
+            <button class="add-line green" v-if="editMode"
+                title="Add Address"
                 @click="addBlankTo('addresses')">
                 +
             </button>
@@ -244,6 +247,9 @@ function randomColor() {
 .modal > div {
     margin-top: 0;
 }
+.modal .field-wrapper {
+    position: relative;
+}
 .modal h2 {
     margin: 0 0 0.5em 0;
 }
@@ -252,6 +258,14 @@ function randomColor() {
     font-size: 0.85em;
     margin: 0;
     color: hsl(89, 100%, 50%);
+}
+.modal button.add-line {
+    min-width: 0;
+    width: 1.5em;
+    height: 1.5em;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 .modal .button-wrapper {
     display: flex;
@@ -262,12 +276,13 @@ function randomColor() {
     width: 45%;
 }
 .modal input {
-    width: 100%;
+    width: calc(100% - 1em);
     margin-top: 0;
     border: 1px solid #666;
     padding-left: 2px;
 }
 .modal input.readonly {
+    padding-left: 0;
     border: none;
 }
 </style>

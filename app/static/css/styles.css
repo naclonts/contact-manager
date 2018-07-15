@@ -20,6 +20,7 @@ body, * {
     font-family: old-school;
 }
 
+/* Buttons */
 button {
     border: none;
     border-radius: 4px;
@@ -31,7 +32,20 @@ button {
 button:hover {
     background-color: hsl(89, 100%, 55%);
 }
+button.green {
+    background-color: hsl(89, 100%, 55%);
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.28),
+                0 1px 18px 0 rgba(0,0,0,0.12),
+                0 3px 5px -1px rgba(0,0,0,0.4);
+}
+button.green:hover {
+    background-color: hsl(89, 100%, 75%);
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.25),
+                0 1px 18px 0 rgba(0,0,0,0.24),
+                0 3px 5px -1px rgba(0,0,0,0.4);
+}
 
+/* Inputs */
 input {
     margin-top: 0;
     border-radius: 2px;
