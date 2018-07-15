@@ -1,5 +1,5 @@
 /**
- * Modal form to add a new contact.
+ * Modal form to add, edit, or view a contact in detail.
  */
 <template>
 <div class="editor-wrapper">

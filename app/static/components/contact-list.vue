@@ -82,7 +82,6 @@ export default {
             showEditorForm: false,
             openContactInEditMode: true,
             editingContact: {},
-            timeoutId: null,
             searchText: '',
             hoveringContactId: null,
             windowWidth: 0,
@@ -184,9 +183,9 @@ export default {
         },
         // Undo delete action
         cancelDelete: function() {
-            this.showUndo = false;
             clearTimeout(this.deletedTimeouts.shift());
             this.contacts.push(this.deletedContacts.shift());
+            if (this.deletedContacts.length == 0) this.showUndo = false;
         },
 
         index: function(contact) {
