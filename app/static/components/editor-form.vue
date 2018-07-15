@@ -4,24 +4,28 @@
 <template>
 <div class="new-contact">
     <div class="modal">
-        <h2>
-            <span v-if="addingNewContact">Add Contact</span>
-            <span v-else-if="editMode">Edit Contact</span>
-            <span v-else>{{ contact.first_name }} {{ contact.last_name }}</span>
-        </h2>
-        <button title="Exit" @click="cancel"><i class="fas fa-times"></i></button>
+        <div class="header">
+            <h2>
+                <span v-if="addingNewContact">Add Contact</span>
+                <span v-else-if="editMode">Edit Contact</span>
+                <span v-else>{{ contact.first_name }} {{ contact.last_name }}</span>
+            </h2>
+            <div>
+                <button v-if="!editMode" @click="editMode=true">
+                    <i class="fas fa-pen" title="Edit contact"></i>
+                </button>
+                <button title="Exit" @click="cancel"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
 
         <input v-model="contact.first_name" placeholder="First name" />
-
         <input v-model="contact.last_name" placeholder="Last name" />
-
         <br />
 
         <label>Birthday</label>
         <input v-model="contact.date_of_birth" placeholder="Birthday"
             type="date"
         />
-
         <br />
 
         <label>Addresses</label>
@@ -30,7 +34,6 @@
             v-model="address.value"
             :placeholder="'Address ' + i"
         />
-
 
         <div class="button-wrapper" v-if="editMode">
             <button @click="save" class="save">Save</button>
@@ -83,8 +86,8 @@ export default {
                 if (!s) return null;
                 return s[0].toUpperCase() + s.substr(1);
             }
-            this.first_name = capitalize(this.first_name);
-            this.last_name = capitalize(this.last_name);
+            this.contact.first_name = capitalize(this.contact.first_name);
+            this.contact.last_name = capitalize(this.contact.last_name);
             // format arrays properly
             this.contact.addresses = saveArray(this.addresses);
             this.$emit('save', clone(this.contact));
@@ -118,15 +121,27 @@ function saveArray(array) {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     z-index: 10;
-    background-color: hsla(0, 0%, 70%, 0.5);
+    background-color: hsla(0, 0%, 39%, 0.88);
+}
+div.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.header button {
+    background-color: transparent;
+    color: inherit;
+}
+.header button:hover {
+    color: hsl(89, 95%, 54%);
 }
 .modal {
     display: flex;
     flex-direction: column;
     background-color: hsl(216, 66%, 12%);
-    margin: 4em auto;
+    margin: 2em auto;
     max-width: 20em;
     padding: 1em;
     border-radius: 4px;
@@ -137,7 +152,7 @@ function saveArray(array) {
     line-height: 1.5em;
 }
 .modal h2 {
-    margin: 0 auto 0.5em auto;
+    margin: 0 0 0.5em 0;
 }
 .modal label {
     font-size: 0.75em;
